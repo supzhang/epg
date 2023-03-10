@@ -1,10 +1,10 @@
-#老张的EPG
+#老张的EPG  
 * 基于`python3`及`django4`的节目表数据抓取及发布系统
 * 本人并非专业，很多内容只是为实现功能，可能会有很多BUG，见谅。
 * 不保证后续会更新。
 * DEMO地址：[老张的EPG](http://epg.51zmt.top:8000/)  
 
-##主要功能 
+##主要功能  
 - 从网上抓取各来源的节目表信息并生成[xmltv](http://wiki.xmltv.org/) 格式文件，用于[perfect player](http://niklabs.com/) 等APP直接载入的节目表信息。
 - 后台配置频道获取列表及抓取日志。
 - 抓取失败时自动更换来源。
