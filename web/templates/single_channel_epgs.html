@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<div>
+    <a href="{{ yesterday_url }}"><span>前一天</span></a>
+    <a href="{{ tomorrow_url }}"><span>下一天</span></a>
+    <ul>
+        {% for epg in epgs %}
+            <li><td>{{ epg.starttime }}</td>&nbsp&nbsp<td>{{ epg.title }}</td>&nbsp&nbsp<td>{{ epg.source }}</td></li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+<footer><a href="https://github.com/supzhang/epg">老张的EPG</a></footer>
+</html>

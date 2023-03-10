@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static "/css/bootstrap/4.3.1/bootstrap.min.css" %}" crossorigin="anonymous">
+<script src="{% static "/js/jquery/2.1.1/jquery-2.1.1.min.js" %}" crossorigin="anonymous"></script>
+<script src="{% static "/js/jquery.lazyload.min.js" %}"></script>
+<script src="{% static "/js/popper/1.14.7/popper.min.js" %}"  crossorigin="anonymous"></script>
+<script src="{% static "/js/bootstrap/4.3.1/bootstrap.min.js" %}"  crossorigin="anonymous"></script>
+<title>老张的EPG Since 2019</title>
+</head>
+<body>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript">
+  $(function () {
+        $("img.lazy").lazyload();
+    });
+
+</script>
+<div class="container bg-light">
+    <h1>老张的EPG</h1>
+    <p>节目表下载地址：<a href="download/e.xml">XML地址</a></p>
+    <p>下载测试m3u文件:<a href="download/test.m3u">测试</a></p>
+    <p>EPG文件中提供{{ channel_no }}个频道 {{ crawl_day }}天内节目表共 {{ epg_no }} 条，<br/>现在提供时间为： {{ start_date }}  -  {{ end_date }} </p>
+        <table class="table table-striped table-primary table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">频道</th>
+                <th scope="col">tvg-name</th>
+                <th scope="col">tvg-id</th>
+                <th scope="col">分类</th>
+                <th scope="col">来源</th>
+                <th scope="col">最新节目日期</th>
+            </tr>
+            </thead>
+            <tbody >
+            <tr>
+                <th></th>
+                <td><a href="#"><img src="#" alt="" height="30"></a></td>
+                <td>需要显示:暂未提供节目表 的频道</td>
+                <td>noepg</td>
+                <td>9999</td>
+                <td>所有</td>
+                <td>没有</td>
+                <td>七天内</td>
+            </tr>
+            {% for channel in channels %}
+            <tr>
+                    <th>{{ forloop.counter }}</th>
+                    <td><a href="{{ channel.logo }}"><img class="lazy" data-original="{{ channel.logo }}" alt="{{ channel.tvg_name }}" height="30"></a></td>
+                    <td><a href="/api/web/?ch={{ channel.tvg_name }}&date={{ start_date_no }}">{{ channel.name }}</a></td>
+                    <td>{{ channel.tvg_name }}</td>
+                    <td>{{ channel.id }}</td>
+                    <td>{{ channel.sort }}</td>
+                    <td>{{ channel.source }}</td>
+                    <td>{{ channel.last_program_date }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+  </div>
+  </body>
+<footer class="footer">
+<ul class="list-inline text-center">
+    <em>&nbsp&nbsp请注明来源：<a href="http://epg.51zmt.top:8000">老张的EPG</a></em>&nbsp&nbsp<em><a href="https://github.com/supzhang/epg">源码分享</a></em></ul></footer>
+</html>
+
+
+
