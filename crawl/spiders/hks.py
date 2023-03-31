@@ -1,8 +1,13 @@
 # -*- coding:utf-8 -*-
 # 香港卫视官方来源 1 个频道
+import datetime
+import os
+import requests
 from bs4 import BeautifulSoup as bs
-import requests, datetime,os
+
 from utils.general import headers
+
+
 def get_epgs_hks(channel, channel_id, dt, func_arg):
     epgs = []
     msg = ''
@@ -10,7 +15,7 @@ def get_epgs_hks(channel, channel_id, dt, func_arg):
     url = 'http://www.hkstv.tv/index/live.html'
 
     try:
-        res = requests.get(url, headers=headers,timeout=5)
+        res = requests.get(url, headers=headers, timeout=5)
         res.encoding = 'utf-8'
         soup = bs(res.text, 'html.parser')
         lis = soup.select('div.living-list ul > li')
@@ -31,14 +36,14 @@ def get_epgs_hks(channel, channel_id, dt, func_arg):
     except Exception as e:
         success = 0
         spidername = os.path.basename(__file__).split('.')[0]
-        msg = 'spider-%s- %s' % (spidername,e)
+        msg = 'spider-%s- %s' % (spidername, e)
 
     ret = {
         'success': success,
         'epgs': epgs,
         'msg': msg,
         'last_program_date': starttime.date(),
-        'ban':0,
+        'ban': 0,
     }
     return ret
 
@@ -49,7 +54,7 @@ def get_channels_hks():
     channel = {
         'name': '香港卫视',
         'id': ['hks'],
-        'url': 'http://www.hkstv.tv/index/live.html',#url,
+        'url': 'http://www.hkstv.tv/index/live.html',  # url,
         'source': 'hks',
         'logo': 'http://www.hkstv.tv/templates/site_shared/assets/img/blogo.png',
         'desc': '香港衛視國際傳媒集團有限公司是一家集衛星電視、網路電視、影視投資、文化產業等為一體的國際傳媒集團。'

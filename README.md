@@ -38,19 +38,56 @@
 默认使用[sqlite3](https://www.sqlite.org/) 数据库  
 ### 下载源码  
 ```git clone http://github.com/supzhang/```  
+
+### 初始化项目
+
+```shell
+pip install -r requirments.txt
+cp .env.dist .env
+# 修改 .env 文件，配置程序运行需要的参数
+python manage.py migrate
+python manage.py loaddata fixtures/Channel.json --app web.Channel
+```
+
 ### 抓取数据  
-```python
-python main.py  #抓取数据并存入数据库，可设置为定时任务
-python main.py -channel #抓取所有来源的频道
-python main.py -n CCTV1 #单独测试某一频道  
+```shell
+python main.py --help
+python main.py  # 抓取数据并存入数据库，可设置为定时任务
+python main.py --channel # 抓取所有来源的频道
+python main.py -n CCTV1 # 单独测试某一频道  
+```
+或者用 Django 的 manage 命令
+```shell
+python manage.py start_crawl --help
 ```
 另：抓取的频道会加入Channel_list表，需要自己手动整理进Channel表中才可以抓取
 ![抓取](./img/crawl.png)  
 ### 启动后台及接口
 #### 启动后台
-```python
+```shell
 python manage.py runserver 0.0.0.0:80
 ```
+
+### 使用 Docker
+```shell
+# 初始化数据库
+docker run -v `pwd`/.env:/app/.env -v `pwd`/download:/app/download -v `pwd`/db.sqlite3:/app/db.sqlite3 --rm wolfg1969/epg:latest python manage.py migrate
+docker run -v `pwd`/.env:/app/.env -v `pwd`/download:/app/download -v `pwd`/db.sqlite3:/app/db.sqlite3 --rm wolfg1969/epg:latest python manage.py loaddata /app/web/fixtures/Channel.json --app web.Channel
+# 启动后台
+docker run -p 8000:8000 -v `pwd`/.env:/app/.env -v `pwd`/download:/app/download -v `pwd`/db.sqlite3:/app/db.sqlite3 -d --name egpserver wolfg1969/epg:latest
+# 抓取数据
+docker run -v `pwd`/.env:/app/.env -v `pwd`/download:/app/download -v `pwd`/db.sqlite3:/app/db.sqlite3 --rm wolfg1969/epg:latest python manage.py start_crawl
+```
+或者使用 docker compose， 参考 ```docker-compose.yml```
+```shell
+docker compose up -d
+docker compose exec epg python manage.py migrate
+docker compose exec epg python manage.py loaddata /app/web/fixtures/Channel.json --app web.Channel
+
+docker compose exec epg python manage.py start_crawl
+```
+
+
 #### 访问  
 浏览器访问[http://127.0.0.1](http://127.0.0.1)查看已有数据抓取情况。  
 ![主页](./img/main_page.png)  

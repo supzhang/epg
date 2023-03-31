@@ -5,11 +5,12 @@ from unittest import TestCase
 
 from langconv import *
 
+
 class ConvertMapTest(TestCase):
     def test_map(self):
         mapping = {'a': 'b', 'b': 'a', 'abc': 'cba', 'cb': 'bb'}
         cm = ConvertMap('test', mapping)
-        self.assertEqual(len(cm), 6) # with switch node: 'ab' and 'c'
+        self.assertEqual(len(cm), 6)  # with switch node: 'ab' and 'c'
         self.failUnless('a' in cm)
         self.failUnless('c' in cm)
         self.failIf('bc' in cm)
@@ -19,6 +20,7 @@ class ConvertMapTest(TestCase):
         self.assertEqual(cm['ab'].data, (False, True, ''))
         self.assertEqual(cm['abc'].data, (True, False, 'cba'))
         self.assertEqual(cm['cb'].data, (True, False, 'bb'))
+
 
 class ConverterModelTest(TestCase):
     def test_1(self):
@@ -138,13 +140,14 @@ class ConverterModelTest(TestCase):
         c.end()
         self.assertEqual(c.get_result(), 'cdc')
 
+
 class ConverterTest(TestCase):
     def assertConvert(self, name, string, converted):
         c = Converter(name)
         new = c.convert(string)
         assert new == converted, (
                 "convert(%s, '%s') should return '%s' but '%s'" % (
-                    repr(name), string, converted, new)).encode('utf8')
+            repr(name), string, converted, new)).encode('utf8')
 
     def assertST(self, trad, simp):
         if not py3k:
@@ -185,7 +188,8 @@ class ConverterTest(TestCase):
         self.assertST('嘌呤鹼', '嘌呤碱')
         self.assertST('嘧啶鹼', '嘧啶碱')
 
+
 if '__main__' == __name__:
     import unittest
-    unittest.main()
 
+    unittest.main()

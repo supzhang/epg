@@ -1,15 +1,20 @@
-#-*- coding:utf-8 -*-
-#广东广播电视台-官网来源,2021-12-16添加到数据库，只有广东地区频道共10多个
-import requests,datetime,os
+# -*- coding:utf-8 -*-
+# 广东广播电视台-官网来源,2021-12-16添加到数据库，只有广东地区频道共10多个
+import datetime
+import os
+import requests
 from bs4 import BeautifulSoup as bs
+
 from utils.general import headers
+
+
 def get_epgs_gdtv(channel, channel_id, dt, func_arg):
     epgs = []
     msg = ''
     success = 1
     try:
-        url = 'http://epg.gdtv.cn/f/%s/%s.xml'%(channel_id,dt.strftime('%Y-%m-%d'))
-        res = requests.get(url,headers = headers,timeout=8)
+        url = 'http://epg.gdtv.cn/f/%s/%s.xml' % (channel_id, dt.strftime('%Y-%m-%d'))
+        res = requests.get(url, headers=headers, timeout=8)
         res.encoding = 'utf-8'
         soup = bs(res.text, 'html.parser')
         epgs_contents = soup.select('content')
@@ -29,21 +34,22 @@ def get_epgs_gdtv(channel, channel_id, dt, func_arg):
     except Exception as e:
         success = 0
         spidername = os.path.basename(__file__).split('.')[0]
-        msg = 'spider-%s- %s' % (spidername,e)
+        msg = 'spider-%s- %s' % (spidername, e)
     ret = {
         'success': success,
         'epgs': epgs,
         'msg': msg,
         'last_program_date': dt,
-        'ban':0,
+        'ban': 0,
     }
     return ret
 
+
 def get_channels_gdtv():
     url = 'http://epg.gdtv.cn/f/1.xml'
-    res = requests.get(url,headers = headers)
+    res = requests.get(url, headers=headers)
     res.encoding = 'utf-8'
-    soup = bs(res.text,'html.parser')
+    soup = bs(res.text, 'html.parser')
     contents = soup.select('channel')
     channels = []
     for content in contents:
@@ -57,9 +63,8 @@ def get_channels_gdtv():
             'source': 'gdtv',
             'logo': '',
             'desc': '',
-            'sort':'广东',
-            'newestdate':cdate
+            'sort': '广东',
+            'newestdate': cdate
         }
         channels.append(channel)
     return channels
-

@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+*.sqlite3
+*.pyc
+local_settings.py
+
+# Logs
+logs/
+*.log
+
+# Media files
+media/
+
+# Static files
+staticfiles/
+
+# Other project files
+db.sqlite3
+/site/
+*.egg-info/
+*.egg
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Mac-specific files
+.DS_Store
+
+# Compiled C extensions
+*.so
+*.dylib
+
+*.bak
+
+# Dependency directories
+venv/
+
+.python-version
+.env.docker-compose
+download/

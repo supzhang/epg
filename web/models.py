@@ -1,36 +1,41 @@
 # -*- coding:utf-8 -*-
-from django.db import models, transaction
-from django.db.models import Q
-from dateutil import tz
-from utils.general import cht_to_chs, add_info_desc, add_info_title
 import datetime
+
+from dateutil import tz
+from django.db import models
+from django.db.models import Q
 from django.utils import timezone
+
+from utils.general import cht_to_chs, add_info_desc, add_info_title
+
 tz_sh = tz.gettz('Asia/Shanghai')
+
+
 class Channel(models.Model):
     source_choices = [
-        ('tvmao','电视猫'),
-        ('tvsou','搜视'),
-        ('cctv','央视'),
+        ('tvmao', '电视猫'),
+        ('tvsou', '搜视'),
+        ('cctv', '央视'),
         ('zhongshu', '中数'),
-        ('tbc','台湾宽频tbc'),
-        ('mod','中华电信MOD'),
-        ('cabletv','香港有线宽频caletv'),
-        ('g4tv','台湾四季电视'),
-        ('icable','香港有线宽频i-cable'),
-        ('nowtv','香港NOWTV'),
-        ('tvb','香港无线电视TVB'),
-        ('smg','上海广播电视'),
+        ('tbc', '台湾宽频tbc'),
+        ('mod', '中华电信MOD'),
+        ('cabletv', '香港有线宽频caletv'),
+        ('g4tv', '台湾四季电视'),
+        ('icable', '香港有线宽频i-cable'),
+        ('nowtv', '香港NOWTV'),
+        ('tvb', '香港无线电视TVB'),
+        ('smg', '上海广播电视'),
         ('btv', '北京卫视'),
         ('gdtv', '广东卫视'),
-        ('hks','香港卫视'),
-        ('viu','viutv'),
-        ('chuanliu','川流TV'),
-        ('mytvsuper','myTVSUPER')
+        ('hks', '香港卫视'),
+        ('viu', 'viutv'),
+        ('chuanliu', '川流TV'),
+        ('mytvsuper', 'myTVSUPER')
 
     ]
     need_get = [
-        (1,'是'),
-        (0,'否')
+        (1, '是'),
+        (0, '否')
     ]
     channel_id = models.CharField('频道来源网站ID', max_length=300)
     tvg_name = models.CharField('匹配用的tvg-name', null=False, max_length=100, db_index=True)
@@ -40,20 +45,21 @@ class Channel(models.Model):
     last_program_date = models.DateField('最新节目日期', db_index=True, null=True)
     last_crawl_dt = models.DateTimeField('最近的采集日期', auto_now=True, null=True)
     create_dt = models.DateTimeField('创建日期', auto_now_add=True, null=True)
-    descr = models.CharField('频道描述', max_length=500, null=True,blank=True)
-    has_epg = models.IntegerField('是否有节目表',choices=need_get, default=0, db_index=True)
-    ineed = models.IntegerField('是否需获取', choices=need_get,default=0, db_index=True)
-    source = models.CharField('节目来源', choices = source_choices,max_length=50, db_index=True, null=True)
-    recrawl = models.IntegerField('需重新获取当天数据', choices = need_get,db_index=True, default=0)
-    patten = models.CharField('本频道正则', max_length=100, null=True,blank = True)
-    remark = models.CharField('备注', max_length=500, null=True ,blank = True)
+    descr = models.CharField('频道描述', max_length=500, null=True, blank=True)
+    has_epg = models.IntegerField('是否有节目表', choices=need_get, default=0, db_index=True)
+    ineed = models.IntegerField('是否需获取', choices=need_get, default=0, db_index=True)
+    source = models.CharField('节目来源', choices=source_choices, max_length=50, db_index=True, null=True)
+    recrawl = models.IntegerField('需重新获取当天数据', choices=need_get, db_index=True, default=0)
+    patten = models.CharField('本频道正则', max_length=100, null=True, blank=True)
+    remark = models.CharField('备注', max_length=500, null=True, blank=True)
 
     def __str__(self):
-        return '-'.join([str(self.id),self.name,self.tvg_name,self.source if self.source else ''])
+        return '-'.join([str(self.id), self.name, self.tvg_name, self.source if self.source else ''])
 
     class Meta:
         verbose_name = '频道列表'
         verbose_name_plural = '频道列表'
+
     # 获取需要抓取的频道，如果需要重新抓取，则使用，recrawl = 1
     def get_crawl_channels(self, need_date, recrawl=0):
         if recrawl == 1:
@@ -87,9 +93,11 @@ class Channel(models.Model):
         else:
             channels = self.objects.filter(sort__in=sorts, ineed=1, has_epg=1)
         return [channels, channels.values_list('id')]
+
     def get_match_channels(self):
-        channels = self.objects.filter(ineed = 1,has_epg=1)
+        channels = self.objects.filter(ineed=1, has_epg=1)
         return channels
+
     def save(self, *args, **kwargs):
         if self.source in self.channel_id:
             super().save(*args, **kwargs)
@@ -106,6 +114,7 @@ class Epg(models.Model):
     program_date = models.DateField('节目所属于日期', db_index=True)
     crawl_dt = models.DateTimeField('采集时间', auto_now_add=True, null=True)
     source = models.CharField('节目来源', max_length=20, null=True)
+
     def __str__(self):
         return '%s %s %s' % (self.channel_id, self.starttime.astimezone(tz=tz_sh), self.title)
 
@@ -133,7 +142,8 @@ class Epg(models.Model):
     def get_epgs(self, channel_ids, need_program_date):
         if need_program_date > datetime.datetime.now().date():
             epgs = self.objects.filter(
-                channel_id__in=channel_ids,program_date__gte=datetime.datetime.now(),program_date__lte=need_program_date)  # ,program_date__lte=program_date,program_date__gte=datetime.datetime.now().date())
+                channel_id__in=channel_ids, program_date__gte=datetime.datetime.now(),
+                program_date__lte=need_program_date)  # ,program_date__lte=program_date,program_date__gte=datetime.datetime.now().date())
             if epgs.count() == 0:  # 没有数据则获取当天数据
                 epgs = self.objects.filter(channel_id__in=channel_ids, program_date=datetime.datetime.now().date())
         else:
@@ -171,7 +181,7 @@ class Epg(models.Model):
         querylist = []
         n = 0
         # 对只有开始日期，没有终止日期的来源，增加上一个的终止日期（不同来源处理不同方式）,全部不在各自方法中更改
-        if ret['source'] in ['tvmao', 'tvsou', 'smg', 'cabletv', 'icable', 'mod', 'tvb', 'zhongshu','hks']:
+        if ret['source'] in ['tvmao', 'tvsou', 'smg', 'cabletv', 'icable', 'mod', 'tvb', 'zhongshu', 'hks']:
             epglen = len(ret['epgs'])
             for x in range(epglen):
                 if x < epglen - 1:
@@ -187,8 +197,8 @@ class Epg(models.Model):
         n = 0
         for epg in ret['epgs']:
             try:
-                n+=1
-                if ret['source'] in ['mod', 'cabletv', 'tbc', 'g4tv', 'icable', 'nowtv', 'tvb','viu']:  # 对繁体的转简体中文
+                n += 1
+                if ret['source'] in ['mod', 'cabletv', 'tbc', 'g4tv', 'icable', 'nowtv', 'tvb', 'viu']:  # 对繁体的转简体中文
                     epg['title'] = cht_to_chs(epg['title'])
                     descr = cht_to_chs(epg['desc']) if 'desc' in epg else ''
                 else:
@@ -219,11 +229,11 @@ class Epg(models.Model):
             ret = self.objects.filter(channel_id=channel_id, program_date=program_date).delete()
         else:
             ret = self.objects.filter(channel_id=channel_id, program_date__gte=program_date,
-                                      program_date_lte=last_program_date).delete()
+                                      program_date__lte=last_program_date).delete()
         return ret
 
 
-class Crawl_log(models.Model):
+class CrawlLog(models.Model):
     LOG_LEVELS = (
         (1, '信息'),
         (2, '错误警告')
@@ -242,40 +252,46 @@ class Crawl_log(models.Model):
     class Meta:
         verbose_name = '抓取日志'
         verbose_name_plural = '抓取日志'
+        db_table = 'web_crawl_log'
 
-class Channel_list(models.Model):
+
+class ChannelList(models.Model):
     is_alive_choice = (
         (0, '否'),
         (1, '是')
     )
-    inner_channel_id = models.IntegerField('内部id',default=99999,db_index = True)
-    out_channel_id = models.CharField('来源网站上的id',max_length=100)
-    inner_name = models.CharField('内部tvg-name',max_length=20)
-    out_name = models.CharField('来源网站上的名称',max_length=20)
-    source = models.CharField('来源网站',max_length=20)
-    is_alive = models.IntegerField('来源网站上是否仍然存在',choices = is_alive_choice,default = 1)
-    create_date = models.DateField('加入日期',auto_now_add = True)
-    update_date = models.DateField('更新日期',auto_now_add=True)
-    #del_date = models.DateField('来源网站取消日期',auto_now_add=True)
+    inner_channel_id = models.IntegerField('内部id', default=99999, db_index=True)
+    out_channel_id = models.CharField('来源网站上的id', max_length=100)
+    inner_name = models.CharField('内部tvg-name', max_length=20)
+    out_name = models.CharField('来源网站上的名称', max_length=20)
+    source = models.CharField('来源网站', max_length=20)
+    is_alive = models.IntegerField('来源网站上是否仍然存在', choices=is_alive_choice, default=1)
+    create_date = models.DateField('加入日期', auto_now_add=True)
+    update_date = models.DateField('更新日期', auto_now_add=True)
+
+    # del_date = models.DateField('来源网站取消日期',auto_now_add=True)
     def __str__(self):
-        return '%s-%s-%s' % (self.inner_channel_id,self.inner_name,self.out_name)
+        return '%s-%s-%s' % (self.inner_channel_id, self.inner_name, self.out_name)
+
     class Meta:
         verbose_name = "频道来源整理表"
         verbose_name_plural = "频道来源整理表"
-    def save_to_db(self,channels):
+        db_table = 'web_channel_list'
+
+    def save_to_db(self, channels):
         msg = 'Channel_list save success!'
         success = 1
-        old_channels_same_source = self.objects.filter(source = channels[0]['source'])
+        old_channels_same_source = self.objects.filter(source=channels[0]['source'])
         querylist = []
-        new_no = 0  #新增加
-        update_no = 0 #更新的
-        not_alive_no = 0 #已经失效的
+        new_no = 0  # 新增加
+        update_no = 0  # 更新的
+        not_alive_no = 0  # 已经失效的
         dt_now = datetime.datetime.now().date()
         is_alive_list = []
         for channel in channels:
             try:
                 for channel_old in old_channels_same_source:
-                    #原来已经保存过
+                    # 原来已经保存过
                     if channel_old.out_name == channel['name']:
                         channel_old.out_channel_id = ','.join(channel['id'])
                         channel_old.update_date = dt_now
@@ -283,22 +299,22 @@ class Channel_list(models.Model):
                         is_alive_list.append(channel_old)
                         update_no += 1
                         break
-                else:#新数据
-                    querye = Channel_list(inner_channel_id=0,
-                                          out_channel_id=','.join(channel['id']),
-                                          inner_name='',
-                                          out_name=channel['name'],
-                                          source=channel['source'],
-                                          is_alive=True,
-                                          create_date=dt_now,
-                                          update_date=dt_now)
+                else:  # 新数据
+                    querye = ChannelList(inner_channel_id=0,
+                                         out_channel_id=','.join(channel['id']),
+                                         inner_name='',
+                                         out_name=channel['name'],
+                                         source=channel['source'],
+                                         is_alive=True,
+                                         create_date=dt_now,
+                                         update_date=dt_now)
                     new_no += 1
                     querylist.append(querye)
             except Exception as e:
                 success = 0
                 msg = 'web-models-channel_list-save1 %s' % (e)
                 continue
-        #已经从官网剔除的标记IS_ALIVE false
+        # 已经从官网剔除的标记IS_ALIVE false
         for old_channel in old_channels_same_source:
             if old_channel not in is_alive_list:
                 old_channel.is_alive = False
@@ -309,9 +325,9 @@ class Channel_list(models.Model):
         except Exception as e:
             success = 0
             msg = 'web-models-channel_list-save_to_dbs bulk_create2： %s' % (e)
-        msg = '新增:%s,更新:%s,失效:%s,%s'%(new_no,update_no,not_alive_no,msg)
+        msg = '新增:%s,更新:%s,失效:%s,%s' % (new_no, update_no, not_alive_no, msg)
         ret = {
-            'success':success,
-            'msg':msg
+            'success': success,
+            'msg': msg
         }
         return ret

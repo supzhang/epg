@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+    epg:
+        image: wolfg1969/epg:latest
+        depends_on:
+            - epgdb
+        restart: unless-stopped
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./.env.docker-compose:/app/.env
+            - ./download:/app/download
+    epgdb:
+        restart: unless-stopped
+        image: mariadb:10.10
+        security_opt: # see https://github.com/MariaDB/mariadb-docker/issues/434#issuecomment-1136151239
+          - seccomp:unconfined
+          - apparmor:unconfined
+        command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+        ## Never store database files on an unreliable device such as a USB flash drive, an SD card, or a shared network folder:
+        volumes:
+          - "epgdb-data:/var/lib/mysql:rw" # DO NOT REMOVE
+        environment:
+          MARIADB_AUTO_UPGRADE: "1"
+          MARIADB_INITDB_SKIP_TZINFO: "1"
+          MARIADB_DATABASE: "epgdb"
+          MARIADB_USER: "epguser"
+          MARIADB_PASSWORD: "epgpasswd"
+          MARIADB_ROOT_PASSWORD: "epg"
+          # In .env file, set DATABASE_URL=mysql://epguser:epgpasswd@epgdb:3306/epgdb?charset=utf8mb4
+
+volumes:
+  epgdb-data:

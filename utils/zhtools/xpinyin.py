@@ -42,7 +42,7 @@ class Pinyin(object):
     """
 
     data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), \
-            'Mandarin.dat')
+                             'Mandarin.dat')
 
     def __init__(self):
         self.dict = {}
@@ -90,6 +90,7 @@ class Pinyin(object):
 if __name__ == '__main__':
     import unittest
 
+
     class PinyinTestCase(unittest.TestCase):
         def setUp(self):
             import sys
@@ -124,5 +125,6 @@ if __name__ == '__main__':
             a2 = self.to_unicode('吖腌錒锕阿嗄阿阿啊阿')
             self.assertEqual(''.join(self.py.py2hz(s1)), a1)
             self.assertEqual(''.join(self.py.py2hz(s2)), a2)
+
 
     unittest.main()

@@ -11506,17 +11506,17 @@ def converter(text, table, errors=None):
 
 # <FIXME> some characters are not in SHIFT_JIS
 for k in (0x805B, 0x607A, 0x607D, 0x6080, 0x6374, 0x83B8, 0x83E4, 0x8416,
-        0x8421, 0x849E, 0x663A, 0x6670, 0x7118, 0x9BC7, 0x6725, 0x6862, 0x89E5,
-        0x8A1A, 0x8BB1, 0x8C0C, 0x8C6C, 0x6CFE, 0x8D95, 0x6DB1, 0x4E85, 0x6EE2,
-        0x9093, 0x70E8, 0x50E9, 0x51DE, 0x72B7, 0x52F2, 0x52FB, 0x5389, 0x740F,
-        0x948A, 0x9490, 0x94A4, 0x94B0, 0x94BE, 0x94C2, 0x94F0, 0x94FB, 0x951C,
-        0x9533, 0x953E, 0x955B, 0x7856, 0x98A2, 0x7936, 0x9A26, 0x5CAD, 0x7CB8,
-        0x94CD, 0x7CED, 0x5D58, 0x5DE0, 0x7DFE, 0x5E15, 0x7F2F):
+          0x8421, 0x849E, 0x663A, 0x6670, 0x7118, 0x9BC7, 0x6725, 0x6862, 0x89E5,
+          0x8A1A, 0x8BB1, 0x8C0C, 0x8C6C, 0x6CFE, 0x8D95, 0x6DB1, 0x4E85, 0x6EE2,
+          0x9093, 0x70E8, 0x50E9, 0x51DE, 0x72B7, 0x52F2, 0x52FB, 0x5389, 0x740F,
+          0x948A, 0x9490, 0x94A4, 0x94B0, 0x94BE, 0x94C2, 0x94F0, 0x94FB, 0x951C,
+          0x9533, 0x953E, 0x955B, 0x7856, 0x98A2, 0x7936, 0x9A26, 0x5CAD, 0x7CB8,
+          0x94CD, 0x7CED, 0x5D58, 0x5DE0, 0x7DFE, 0x5E15, 0x7F2F):
     del Chinese2Kanji_Table[k]
-
 
 if '__main__' == __name__:
     import unittest
+
 
     class ConverterTest(unittest.TestCase):
         def toU(self, s):
@@ -11526,11 +11526,11 @@ if '__main__' == __name__:
             s1 = self.toU('优酷视频下载的Python')
             s2 = self.toU('優酷視頻下載的Python')
             self.assertEqual(
-                    converter(s1, Simp2Trad_Table, null_error_handler),
-                    s2)
+                converter(s1, Simp2Trad_Table, null_error_handler),
+                s2)
             self.assertEqual(
-                    converter(s2, Trad2Simp_Table, null_error_handler),
-                    s1)
+                converter(s2, Trad2Simp_Table, null_error_handler),
+                s1)
 
         def testSimpKanji(self):
             s1 = self.toU('从优酷网站上下载flv或mp4格式的视频文件')
@@ -11541,10 +11541,11 @@ if '__main__' == __name__:
         def testTradKanji(self):
             s1 = self.toU('mp4格式的視頻文件（包括分段視頻的拼接）')
             self.assertEqual(
-                    converter(s1, Chinese2Kanji_Table, empty_error_handler),
-                    self.toU(''))
+                converter(s1, Chinese2Kanji_Table, empty_error_handler),
+                self.toU(''))
             self.assertEqual(converter(s1, Chinese2Kanji_Table), s1)
             self.assertEqual(converter(s1, Kanji2Trad_Table), s1)
+
 
     # out = []
     # for k, v in Chinese2Kanji_Table.items():
