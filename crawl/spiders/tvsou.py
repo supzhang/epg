@@ -72,7 +72,6 @@ def get_epgs_tvsou(channel, channel_id_, dt, func_arg):
                    'title': title,
                    'desc': desc,
                    'program_date': dt,
-                   'super_id': channel.super_id,
                    }
             epgs.append(epg)
         except Exception as e:
