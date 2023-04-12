@@ -195,7 +195,7 @@ def get_epgs_tvmao2(channel,channel_id,dt,func_arg):
     need_date = dt
     delta = need_date - now_date
     now_weekday = now_date.weekday()
-    need_weekday = now_weekday + delta.days
+    need_weekday = now_weekday + delta.days + 1
     id_split = channel_id.split('-')
     if len(id_split) == 2:
         id = id_split[1]
