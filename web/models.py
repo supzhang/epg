@@ -171,7 +171,7 @@ class Epg(models.Model):
         querylist = []
         n = 0
         # 对只有开始日期，没有终止日期的来源，增加上一个的终止日期（不同来源处理不同方式）,全部不在各自方法中更改
-        if ret['source'] in ['tvmao', 'tvsou', 'smg', 'cabletv', 'icable', 'mod', 'tvb', 'zhongshu','hks']:
+        if ret['source'] in ['tvmao', 'tvsou', 'smg', 'cabletv', 'icable', 'mod', 'tvb', 'zhongshu','hks','mytvsuper']:
             epglen = len(ret['epgs'])
             for x in range(epglen):
                 if x < epglen - 1:
@@ -188,7 +188,7 @@ class Epg(models.Model):
         for epg in ret['epgs']:
             try:
                 n+=1
-                if ret['source'] in ['mod', 'cabletv', 'tbc', 'g4tv', 'icable', 'nowtv', 'tvb','viu']:  # 对繁体的转简体中文
+                if ret['source'] in ['mod', 'cabletv', 'tbc', 'g4tv', 'icable', 'nowtv', 'tvb','viu','mytvsuper']:  # 对繁体的转简体中文
                     epg['title'] = cht_to_chs(epg['title'])
                     descr = cht_to_chs(epg['desc']) if 'desc' in epg else ''
                 else:
