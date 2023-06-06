@@ -37,7 +37,7 @@ def get_epgs_gxntv(channel, channel_id, dt, func_arg):
             starttime = datetime.datetime.strptime(starttime_str,'%Y-%m-%d %H:%M:%S')
             endtime = starttime+datetime.timedelta(seconds = time_delay)
             title = epga['programName'].strip()
-            epg = {'channel_id': '',#channel.id,
+            epg = {'channel_id': channel.id,
                    'starttime': starttime,
                    'endtime': endtime,
                    'title': title,
