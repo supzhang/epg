@@ -38,7 +38,7 @@ epg_funcs = {
                 'viu':get_epgs_viu,
                 'chuanliu':get_epgs_chuanliu,
                 'mytvsuper':get_epgs_mytvsuper,
-                'gxntv':get_epgs_gxntv,
+                'gxntv':get_epgs_gxntv
             }  #所有EPG的接口
 epg_source = {
                 'tvmao':get_channels_tvmao,
@@ -105,10 +105,10 @@ __all__ = ['get_epgs_4gtv',
            'get_epgs_viu',
            'get_epgs_chuanliu',
            'get_epgs_mytvsuper',
-           'get_epgs_gxntv,
-            'epg_funcs',
+           'get_epgs_gxntv',
+           'epg_funcs',
            'func_args',
-           'epg_func',
+           'epg_func'
            ]
 
 
