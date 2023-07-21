@@ -9,7 +9,6 @@ def get_epgs_hebtv(channel, channel_id, dt, func_arg):  # channel_id,dt
     msg = ''
     success = 1
     today = dt.strftime('%Y-%m-%d')
-    print(today)
     url = 'https://api.cmc.hebtv.com/appapi/api/content/get-live-info'
     data = {
         "sourceId": channel_id,
@@ -30,7 +29,6 @@ def get_epgs_hebtv(channel, channel_id, dt, func_arg):  # channel_id,dt
         epg_list = res_j['result']['data']
         start_get = 0
         for date, item in epg_list.items():
-            print(date, today)
             if date == today:
                 start_get = 1
 
@@ -50,7 +48,6 @@ def get_epgs_hebtv(channel, channel_id, dt, func_arg):  # channel_id,dt
                         'desc': desc,
                         'program_date': date,
                     }
-                    print(epg)
                     epgs.append(epg)
     except Exception as e:
         success = 0
