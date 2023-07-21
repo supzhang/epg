@@ -21,6 +21,7 @@ from crawl.spiders.mytvsuper import get_epgs_mytvsuper,get_channels_mytvsuper
 from crawl.spiders.gxntv import get_epgs_gxntv,get_channels_gxntv
 from crawl.spiders.iqilu import get_epgs_iqilu,get_channels_iqilu
 from crawl.spiders.xjtvs import get_epgs_xjtvs,get_channels_xjtvs
+from crawl.spiders.hebtv import get_epgs_hebtv,get_channels_hebtv
 from utils.general import chuanliu_Authorization
 epg_funcs = {
                 'tvmao':get_epgs_tvmao2,
@@ -42,8 +43,8 @@ epg_funcs = {
                 'mytvsuper':get_epgs_mytvsuper,
                 'gxntv':get_epgs_gxntv,
                 'iqilu':get_epgs_iqilu,
-                'xjtvs': get_epgs_xjtvs,
-
+                'xjtvs':get_epgs_xjtvs,
+                'hebtv':get_epgs_hebtv,
             }  #所有EPG的接口
 epg_source = {
                 'tvmao':get_channels_tvmao,
@@ -65,9 +66,9 @@ epg_source = {
                 'mytvsuper':get_channels_mytvsuper,
                 'gxntv':get_channels_gxntv,
                 'iqilu':get_channels_iqilu,
-                'xjtvs': get_channels_xjtvs,
-
-            }
+                'xjtvs':get_channels_xjtvs,
+                'hebtv':get_channels_hebtv,
+        }
 func_args = {
                 'tvmao':0,
                 'tbc':0,
@@ -89,6 +90,7 @@ func_args = {
                 'gxntv':0,
                 'iqilu':0,
                 'xjtvs':0,
+                'hebtv':0,
             }
 def epg_func(channel,id,dt,func_arg=0,source = 0):
     if source:
@@ -117,6 +119,8 @@ __all__ = ['get_epgs_4gtv',
            'get_epgs_mytvsuper',
            'get_epgs_gxntv',
            'get_epgs_iqilu',
+           'get_epgs_xjtvs',
+           'get_epgs_hebtv',
            'epg_funcs',
            'func_args',
            'epg_func',

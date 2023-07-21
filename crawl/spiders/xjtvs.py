@@ -59,6 +59,10 @@ def get_channels_xjtvs():
         logo = ''
         id = li['channelID']
         desc = li['shortName']
+        #名字前面加上区别。不然后期分辨不出。
+        if not name.startswith("新疆"):
+            name = "新疆" + name
+
         channel = {
             'name': name,
             'id': [id],
