@@ -17,9 +17,10 @@ def get_epgs_sdtv(channel, channel_id, dt, func_arg):
         re_j = re.search('.+?\((.+?)\)', res.text, re.DOTALL).group(1)
         re_json = json.loads(re_j)
         contents = re_json['value']['list']
+        time_delta_days = (dt - datetime.datetime.now().date()).days
         for content in contents:
-            starttime = datetime.datetime.fromtimestamp(int(content['begintime']))
-            endtime = datetime.datetime.fromtimestamp(int(content['endtime']))
+            starttime = datetime.datetime.fromtimestamp(int(content['begintime'])) + datetime.timedelta(days = time_delta_days)
+            endtime = datetime.datetime.fromtimestamp(int(content['endtime'])) + datetime.timedelta(days = time_delta_days)
             title = content['name']
             epg = {'channel_id': channel_id,
                    'starttime': starttime,
