@@ -36,11 +36,11 @@ def get_epgs_kankan(channel, channel_id, dt, func_arg):
         url = f"https://kapi.kankanews.com/content/pc/tv/programs?channel_id={channel_id}&date={date}"
         res = requests.request("GET", url, headers=headers, data=payload, timeout=8)
         res.encoding = 'utf-8'
-        re_json = json.loads(res)
+        re_json = json.loads(res.text)
         contents = re_json['result']['programs']
         for content in contents:
-            starttime = content['start_time_string']
-            endtime = content['end_time_string']
+            starttime = datetime.datetime.fromtimestamp(content['start_time'])
+            endtime = datetime.datetime.fromtimestamp(content['end_time'])
             title = content['name']
             epg = {'channel_id': channel_id,
                    'starttime': starttime,
@@ -63,6 +63,12 @@ def get_epgs_kankan(channel, channel_id, dt, func_arg):
     }
 
 def get_channels_kankan():  # sourcery skip: avoid-builtin-shadow
+    ids = {'东方卫视': '1',
+           '新闻综合': '2',
+           '第一财经': '5',
+           '纪实人文': '6',
+           '都市频道': '4',
+           '哈哈炫动': '9'}
     channels = []
     url = 'https://live.kankanews.com/huikan/'
     res = requests.get(url)
@@ -71,7 +77,7 @@ def get_channels_kankan():  # sourcery skip: avoid-builtin-shadow
     div_channels = soup.select('div.channel.item.cur > li')
     for i, div_channel in enumerate(div_channels):
         name = div_channel.p.text.strip()
-        id = str(i+1)
+        id = ids[name]
         channel = {
             'name': name,
             'id': [id],
