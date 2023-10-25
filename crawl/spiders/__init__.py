@@ -42,7 +42,7 @@ epg_funcs = {
                 'mytvsuper':get_epgs_mytvsuper,
                 'gxntv':get_epgs_gxntv,
                 'sdtv':get_epgs_sdtv,
-                'kankn':get_epgs_kankan,
+                'kankan':get_epgs_kankan,
             }  #所有EPG的接口
 epg_source = {
                 'tvmao':get_channels_tvmao,
@@ -64,7 +64,7 @@ epg_source = {
                 'mytvsuper':get_channels_mytvsuper,
                 'gxntv':get_channels_gxntv,
                 'sdtv':get_channels_sdtv,
-                'kankn':get_channels_kankan,
+                'kankan':get_channels_kankan,
         }
 func_args = {
                 'tvmao':0,
@@ -86,7 +86,7 @@ func_args = {
                 'mytvsuper':0,
                 'gxntv':0,
                 'sdtv':0,
-                'kankn':0,
+                'kankan':0,
             }
 def epg_func(channel,id,dt,func_arg=0,source = 0):
     if source:
