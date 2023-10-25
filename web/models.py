@@ -28,6 +28,7 @@ class Channel(models.Model):
         ('mytvsuper','myTVSUPER'),
         ('gxntv','广西网络广播电视'),
         ('sdtv','山东齐鲁'),
+        ('kankan','看看新闻网'),
     ]
     need_get = [
         (1,'是'),
