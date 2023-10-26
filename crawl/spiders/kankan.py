@@ -75,7 +75,7 @@ def get_channels_kankan():  # sourcery skip: avoid-builtin-shadow
     res.encoding = 'utf-8'
     soup = bs(res.text,'html.parser')
     div_channels = soup.select('div.channel.item.cur > li')
-    for i, div_channel in enumerate(div_channels):
+    for div_channel in div_channels:
         name = div_channel.p.text.strip()
         id = ids[name]
         channel = {
