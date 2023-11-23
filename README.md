@@ -37,7 +37,7 @@
 ## 使用方法
 默认使用[sqlite3](https://www.sqlite.org/) 数据库  
 ### 下载源码  
-```git clone http://github.com/supzhang/```  
+```git clone http://github.com/supzhang/epg```  
 ### 抓取数据  
 ```python
 python main.py  #抓取数据并存入数据库，可设置为定时任务
